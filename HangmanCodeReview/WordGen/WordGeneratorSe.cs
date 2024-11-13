@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HangmanGame.WrodGen
 {
-    public class WordGenerator : IGeneratWord
+    public class WordGeneratorSe : IGeneratWord
     {
         public string Word()
         {

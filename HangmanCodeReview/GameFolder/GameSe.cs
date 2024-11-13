@@ -1,4 +1,5 @@
-﻿using HangmanGame.Interface;
+﻿using HangmanGame.GameCondition;
+using HangmanGame.Interface;
 using HangmanGame.WrodGen;
 
 
@@ -6,20 +7,21 @@ namespace HangmanGame.GameFolder
 {
     public class GameSe : IGame
     {
-        private readonly IGeneratWord _wordToGuess;
+        private IGeneratWord _wordToGuessSe;
         private IHangMan _hangMan;
+        private IGameState _gameState;
 
-        public GameSe(IGeneratWord _genWord, IHangMan _hangman)
+        public GameSe(IGeneratWord _wordToGuessSe, IHangMan _hangMan, IGameState _gameState)
         {
-            _wordToGuess = _genWord;
-            _hangMan = _hangman;
+            this._wordToGuessSe = _wordToGuessSe;
+            this._hangMan = _hangMan;
+            this._gameState = _gameState;
         }
         public void GameOn()
         {
-
             Console.Clear();
             int lives = 6;
-            var wordToGuess = _wordToGuess.Word();
+            var wordToGuess = _wordToGuessSe.Word();
             var hangMan = _hangMan;
 
             char[] guessedWord = new string('_', wordToGuess.Length).ToCharArray();
@@ -32,15 +34,15 @@ namespace HangmanGame.GameFolder
             {
                 hangMan.DisplayHangman(lives);
 
-                Console.WriteLine("\nOrdet: " + new string(guessedWord));
-                Console.WriteLine("Gissade bokstäver: " + string.Join(", ", guessedLetters));
-                Console.Write("Gissa en bokstav: ");
+                Console.WriteLine("\nThe word: " + new string(guessedWord));
+                Console.WriteLine("Guessed letters: " + string.Join(", ", guessedLetters));
+                Console.Write("Guess a letter: ");
                 char guess = Console.ReadLine().ToLower()[0];
 
                 if (guessedLetters.Contains(guess))
                 {
                     Console.Clear();
-                    Console.WriteLine($"Du har redan gissat den bokstaven. Försök igen. Liv kvar {lives}");
+                    Console.WriteLine($"You have already guessed that letter. Try again. Lives remaining: {lives}");
                     continue;
                 }
 
@@ -56,35 +58,21 @@ namespace HangmanGame.GameFolder
                         }
                     }
                     Console.Clear();
-                    Console.WriteLine($"Rätt gissat! Liv kvar {lives}");
+                    Console.WriteLine($"Correct guess! Lives remaining: {lives}");
                 }
                 else
                 {
                     lives--;
                     Console.Clear();
-                    Console.WriteLine($"Fel gissat! Du förlorade ett liv. Liv kvar {lives}");
+                    Console.WriteLine($"Wrong guess! You lost a life. Lives remaining: {lives}");
                 }
                 state = lives > 0 && new string(guessedWord) != wordToGuess.ToLower();
             }
 
-            if (new string(guessedWord) == wordToGuess)
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\nGrattis! Du gissade ordet: {wordToGuess}\nMed {lives} liv kvar.");
-                Console.ResetColor();
-                Console.Write("Tryck på valfri tangent för att återgå till menyn...");
-                Console.ReadKey();
-            }
-            else
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine($"\nTyvärr, du har {lives} liv kvar. Ordet var: {wordToGuess}");
-                Console.ResetColor();
-                Console.Write("Tryck på valfri tangent för att återgå till menyn...");
-                Console.ReadKey();
-            }
+            _gameState.GameStatus(guessedWord, wordToGuess, lives, "eng");
         }
+
+
+
     }
 }

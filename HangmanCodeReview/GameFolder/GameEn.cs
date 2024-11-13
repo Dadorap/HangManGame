@@ -5,20 +5,22 @@ namespace HangmanGame.GameFolder
 {
     public class GameEn : IGame
     {
-        private IGeneratWord _wordToGuess;
+        private IGeneratWord _wordToGuessEn;
         private IHangMan _hangMan;
+        private IGameState _gameState;
 
-        public GameEn(IGeneratWord _genWord, IHangMan _hangman)
+        public GameEn(IGeneratWord _wordToGuessEn, IHangMan _hangMan, IGameState _gameState)
         {
-            _wordToGuess = _genWord;
-            _hangMan = _hangman;
+            this._wordToGuessEn = _wordToGuessEn;
+            this._hangMan = _hangMan;
+            this._gameState = _gameState;
         }
         public void GameOn()
         {
-            
+
             Console.Clear();
             int lives = 6;
-            var wordToGuess = _wordToGuess.Word();
+            var wordToGuess = _wordToGuessEn.Word();
             var hangMan = _hangMan;
 
             char[] guessedWord = new string('_', wordToGuess.Length).ToCharArray();
@@ -34,56 +36,59 @@ namespace HangmanGame.GameFolder
                 Console.WriteLine("\nThe word: " + new string(guessedWord));
                 Console.WriteLine("Guessed letters: " + string.Join(", ", guessedLetters));
                 Console.Write("Guess a letter: ");
-                char guess = Console.ReadLine().ToLower()[0];
-
-                if (guessedLetters.Contains(guess))
+                string input = Console.ReadLine().ToLower();
+                if (!string.IsNullOrEmpty(input) && char.TryParse(input[0].ToString(), out char guess) && input.Length == 1 && !char.IsDigit(guess))
                 {
-                    Console.Clear();
-                    Console.WriteLine("You have already guessed that letter. Try again.");
-                    continue;
-                }
 
-                guessedLetters.Add(guess);
-
-                if (wordToGuess.Contains(guess))
-                {
-                    for (int i = 0; i < wordToGuess.Length; i++)
+                    if (guessedLetters.Contains(guess))
                     {
-                        if (wordToGuess[i] == guess)
-                        {
-                            guessedWord[i] = guess;
-                        }
+                        Console.Clear();
+                        Console.BackgroundColor = ConsoleColor.DarkYellow;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine($"You have already guessed that letter. Try again. Lives remaining: {lives}");
+                        Console.ResetColor();
+                        continue;
                     }
-                    Console.Clear();
-                    Console.WriteLine("Correct guess!");
+
+                    guessedLetters.Add(guess);
+
+                    if (wordToGuess.Contains(guess))
+                    {
+                        for (int i = 0; i < wordToGuess.Length; i++)
+                        {
+                            if (wordToGuess[i] == guess)
+                            {
+                                guessedWord[i] = guess;
+                            }
+                        }
+                        Console.Clear();
+                        Console.BackgroundColor = ConsoleColor.DarkCyan;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine($"Correct guess! Lives remaining: {lives}");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        lives--;
+                        Console.Clear();
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Wrong guess! You lost a life. Lives remaining: {lives}");
+                        Console.ResetColor();
+                    }
+                    state = lives > 0 && new string(guessedWord) != wordToGuess.ToLower();
                 }
                 else
                 {
-                    lives--;
                     Console.Clear();
-                    Console.WriteLine("Wrong guess! You lost a life.");
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid input...");
+                    Console.ResetColor();
                 }
-                state = lives > 0 && new string(guessedWord) != wordToGuess.ToLower();
             }
+            _gameState.GameStatus(guessedWord, wordToGuess, lives, "eng");
 
-            if (new string(guessedWord) == wordToGuess)
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\nCongratulations! You guessed the word: {wordToGuess}");
-                Console.ResetColor();
-                Console.Write("Press any key to retun to menu...");
-                Console.ReadKey();
-            }
-            else
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine($"\nUnfortunately, you have no lives left. The word was: {wordToGuess}");
-                Console.ResetColor();
-                Console.Write("Press any key to return to the menu...");
-                Console.ReadKey();
-            }
         }
+
+
     }
 }

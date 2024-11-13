@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using HangmanGame.GameCondition;
 using HangmanGame.GameFolder;
 using HangmanGame.Interface;
 using HangmanGame.Welcome;
@@ -12,16 +13,39 @@ namespace HangmanGame.AutoFac
         {
             var containerBuilder = new ContainerBuilder();
 
-            // Register the dependencies
-            containerBuilder.RegisterType<WordGenerator>().As<IGeneratWord>();
-            containerBuilder.RegisterType<HangMan>().As<IHangMan>();
+            containerBuilder.RegisterType<WordGeneratorSe>().Named<IGeneratWord>("swedish");
+            containerBuilder.RegisterType<WordGeneratorEn>().Named<IGeneratWord>("english");
+            containerBuilder.RegisterType<GameState>().As<IGameState>();
+
+            containerBuilder.RegisterType<HangManState>().As<IHangMan>();
             containerBuilder.RegisterType<WelcomeScreen>().As<IWelcome>();
 
-            // Register the named IGame implementations
-            containerBuilder.RegisterType<GameEn>().Named<IGame>("gameEn");
-            containerBuilder.RegisterType<GameSe>().Named<IGame>("gameSe");
+            containerBuilder.RegisterType<GameEn>().Named<IGame>("gameEn")
+               .WithParameter(
+                   (pi, ctx) => pi.Name == "_wordToGuessEn",
+                   (pi, ctx) => ctx.ResolveNamed<IGeneratWord>("english")
+               )
+               .WithParameter(
+                   (pi, ctx) => pi.ParameterType == typeof(IHangMan),
+                   (pi, ctx) => ctx.Resolve<IHangMan>()
+               ).WithParameter(
+                   (pi, ctx) => pi.ParameterType == typeof(IGameState),
+                   (pi, ctx) => ctx.Resolve<IGameState>()
+               );
 
-            // Register Menu with all three parameters
+            containerBuilder.RegisterType<GameSe>().Named<IGame>("gameSe")
+                .WithParameter(
+                    (pi, ctx) => pi.Name == "_wordToGuessSe",
+                    (pi, ctx) => ctx.ResolveNamed<IGeneratWord>("swedish")
+                )
+                .WithParameter(
+                    (pi, ctx) => pi.ParameterType == typeof(IHangMan),
+                    (pi, ctx) => ctx.Resolve<IHangMan>()
+                ).WithParameter(
+                   (pi, ctx) => pi.ParameterType == typeof(IGameState),
+                   (pi, ctx) => ctx.Resolve<IGameState>()
+               );
+
             containerBuilder.RegisterType<Menu>().AsSelf()
                 .WithParameter(
                     (pi, ctx) => pi.Name == "_gameEn",

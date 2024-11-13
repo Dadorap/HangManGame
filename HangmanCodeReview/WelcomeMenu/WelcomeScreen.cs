@@ -7,11 +7,9 @@ namespace HangmanGame.Welcome
     public class WelcomeScreen : IWelcome
     {
 
-
         public void WelcomeDisplay()
         {
-  
-               
+            
                 Console.WriteLine("Welcome to Hangman!");
                 Console.WriteLine("You have a total of 6 lives. Guess letters to find the correct word.");
 
@@ -26,10 +24,7 @@ namespace HangmanGame.Welcome
                 Console.WriteLine(" |      ");
                 Console.WriteLine("_|_     ");
                 Console.ResetColor();
-
-
-
-            
+           
         }
     }
 }

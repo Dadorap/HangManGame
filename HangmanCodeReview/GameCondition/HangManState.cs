@@ -5,19 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HangmanGame
+namespace HangmanGame.GameCondition
 {
-    public class HangMan : IHangMan
+    public class HangManState : IHangMan
     {
 
-        public void DisplayHangman(int incorrectGuesses)
+        public void DisplayHangman(int guessesLeft)
         {
-            char head = incorrectGuesses > 0 ? 'o' : ' ';
-            char leftArm = incorrectGuesses > 2 ? '-' : ' ';
-            char body = incorrectGuesses > 1 ? '|' : ' ';
-            char rightArm = incorrectGuesses > 3 ? '-' : ' ';
-            char leftLeg = incorrectGuesses > 4 ? '/' : ' ';
-            char rightLeg = incorrectGuesses > 5 ? '\\' : ' ';
+            char head = guessesLeft > 0 ? 'o' : ' ';
+            char leftArm = guessesLeft > 2 ? '-' : ' ';
+            char body = guessesLeft > 1 ? '|' : ' ';
+            char rightArm = guessesLeft > 3 ? '-' : ' ';
+            char leftLeg = guessesLeft > 4 ? '/' : ' ';
+            char rightLeg = guessesLeft > 5 ? '\\' : ' ';
 
             Console.BackgroundColor = ConsoleColor.DarkGreen;
             Console.ForegroundColor = ConsoleColor.Black;

@@ -65,7 +65,7 @@ namespace HangmanGame.Welcome
                     {
                         case 0:
                             _gameEn.GameOn();
-                            return;
+                            break;
                         case 1:
                             _gameSe.GameOn();
                             break;

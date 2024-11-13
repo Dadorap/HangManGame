@@ -17,7 +17,7 @@ namespace HangmanGame.GameCondition
                 {
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"\nGrattis! Du gissade ordet: {wordToGuess}\nMed {lives} liv kvar.");
+                    Console.WriteLine($"Grattis! Du gissade ordet: {wordToGuess}\nMed {lives} liv kvar.");
                     Console.ResetColor();
                     Console.Write("Tryck på valfri tangent för att återgå till menyn...");
                     Console.ReadKey();
@@ -26,7 +26,7 @@ namespace HangmanGame.GameCondition
                 {
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine($"\nTyvärr, du har {lives} liv kvar. Ordet var: {wordToGuess}");
+                    Console.WriteLine($"Tyvärr, du har {lives} liv kvar. Ordet var: {wordToGuess}");
                     Console.ResetColor();
                     Console.Write("Tryck på valfri tangent för att återgå till menyn...");
                     Console.ReadKey();
@@ -38,7 +38,7 @@ namespace HangmanGame.GameCondition
                 {
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"\nCongratulations! You guessed the word: {wordToGuess}\nWith {lives} lives remaining.");
+                    Console.WriteLine($"Congratulations! You guessed the word: {wordToGuess}\nWith {lives} lives remaining.");
                     Console.ResetColor();
                     Console.Write("Press any key to return to the menu...");
                     Console.ReadKey();
@@ -47,7 +47,7 @@ namespace HangmanGame.GameCondition
                 {
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine($"\nUnfortunately, you have {lives} left. The word was: {wordToGuess}");
+                    Console.WriteLine($"Unfortunately, you have {lives} left. The word was: {wordToGuess}");
                     Console.ResetColor();
                     Console.Write("Press any key to return to the menu...");
                     Console.ReadKey();

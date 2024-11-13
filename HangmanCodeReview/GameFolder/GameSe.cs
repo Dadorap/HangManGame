@@ -34,42 +34,60 @@ namespace HangmanGame.GameFolder
             {
                 hangMan.DisplayHangman(lives);
 
-                Console.WriteLine("\nThe word: " + new string(guessedWord));
-                Console.WriteLine("Guessed letters: " + string.Join(", ", guessedLetters));
-                Console.Write("Guess a letter: ");
-                char guess = Console.ReadLine().ToLower()[0];
-
-                if (guessedLetters.Contains(guess))
+                Console.WriteLine("\nOrdet: " + new string(guessedWord));
+                Console.WriteLine("Gissade bokstäver: " + string.Join(", ", guessedLetters));
+                Console.Write("Gissa en bokstav: ");
+                string input = Console.ReadLine().ToLower();
+                if (!string.IsNullOrEmpty(input) && char.TryParse(input[0].ToString(), out char guess) && input.Length == 1 && !char.IsDigit(guess))
                 {
-                    Console.Clear();
-                    Console.WriteLine($"You have already guessed that letter. Try again. Lives remaining: {lives}");
-                    continue;
-                }
 
-                guessedLetters.Add(guess);
-
-                if (wordToGuess.Contains(guess))
-                {
-                    for (int i = 0; i < wordToGuess.Length; i++)
+                    if (guessedLetters.Contains(guess))
                     {
-                        if (wordToGuess[i] == guess)
-                        {
-                            guessedWord[i] = guess;
-                        }
+                        Console.Clear();
+                        Console.BackgroundColor = ConsoleColor.DarkYellow;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine($"Du har redan gissat den bokstaven. Försök igen. Liv kvar: {lives}");
+                        Console.ResetColor();
+                        continue;
                     }
-                    Console.Clear();
-                    Console.WriteLine($"Correct guess! Lives remaining: {lives}");
+
+                    guessedLetters.Add(guess);
+
+                    if (wordToGuess.Contains(guess))
+                    {
+                        for (int i = 0; i < wordToGuess.Length; i++)
+                        {
+                            if (wordToGuess[i] == guess)
+                            {
+                                guessedWord[i] = guess;
+                            }
+                        }
+                        Console.Clear();
+                        Console.BackgroundColor = ConsoleColor.DarkCyan;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine($"Rätt gissat! Liv kvar: {lives}");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        lives--;
+                        Console.Clear();
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Fel gissat! Du förlorade ett liv. Liv kvar: {lives}");
+                        Console.ResetColor();
+                    }
+                    state = lives > 0 && new string(guessedWord) != wordToGuess.ToLower();
                 }
                 else
                 {
-                    lives--;
                     Console.Clear();
-                    Console.WriteLine($"Wrong guess! You lost a life. Lives remaining: {lives}");
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Ogiltig inmatning...");
+                    Console.ResetColor();
                 }
-                state = lives > 0 && new string(guessedWord) != wordToGuess.ToLower();
             }
+            _gameState.GameStatus(guessedWord, wordToGuess, lives, "swe");
 
-            _gameState.GameStatus(guessedWord, wordToGuess, lives, "eng");
         }
 
 

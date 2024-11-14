@@ -17,7 +17,12 @@ namespace HangmanGame.Welcome
         public void DisplayMenu()
         {
             int currentSelect = 0;
-            List<string> menu = new List<string>() { "Play in English", "Spela på Svenksa", "Exit/Avsluta" };
+            List<string> menu = new()
+            {
+                "Play in English",
+                "Spela på Svenksa",
+                "Exit/Avsluta"
+            };
 
             while (true)
             {
@@ -44,7 +49,7 @@ namespace HangmanGame.Welcome
                     }
                     else
                     {
-                        Console.WriteLine($">>{menu[i]}<<");
+                        Console.WriteLine($"{menu[i]}");
                     }
                     Console.ResetColor();
                 }

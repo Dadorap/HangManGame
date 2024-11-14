@@ -15,36 +15,43 @@ namespace HangmanGame.AutoFac
 
             containerBuilder.RegisterType<WordGeneratorSe>().Named<IGeneratWord>("swedish");
             containerBuilder.RegisterType<WordGeneratorEn>().Named<IGeneratWord>("english");
-            containerBuilder.RegisterType<GameState>().As<IGameState>();
+            containerBuilder.RegisterType<WordReveal>().As<IWordReveal>();
 
+            containerBuilder.RegisterType<GameState>().As<IGameState>();
             containerBuilder.RegisterType<HangManState>().As<IHangMan>();
             containerBuilder.RegisterType<WelcomeScreen>().As<IWelcome>();
 
+            // Register GameEn 
             containerBuilder.RegisterType<GameEn>().Named<IGame>("gameEn")
-               .WithParameter(
-                   (pi, ctx) => pi.Name == "_wordToGuessEn",
-                   (pi, ctx) => ctx.ResolveNamed<IGeneratWord>("english")
-               )
-               .WithParameter(
-                   (pi, ctx) => pi.ParameterType == typeof(IHangMan),
-                   (pi, ctx) => ctx.Resolve<IHangMan>()
-               ).WithParameter(
-                   (pi, ctx) => pi.ParameterType == typeof(IGameState),
-                   (pi, ctx) => ctx.Resolve<IGameState>()
-               );
+                .WithParameter(
+                    (pi, ctx) => pi.Name == "_wordToGuessEn",
+                    (pi, ctx) => ctx.ResolveNamed<IGeneratWord>("english")
+                ).WithParameter(
+                    (pi, ctx) => pi.Name == "_hangMan",
+                    (pi, ctx) => ctx.Resolve<IHangMan>()
+                ).WithParameter(
+                    (pi, ctx) => pi.Name == "_gameState",
+                    (pi, ctx) => ctx.Resolve<IGameState>()
+                ).WithParameter(
+                    (pi, ctx) => pi.Name == "_wordReveal",
+                    (pi, ctx) => ctx.Resolve<IWordReveal>()
+                );
 
+            // Register GameSe
             containerBuilder.RegisterType<GameSe>().Named<IGame>("gameSe")
                 .WithParameter(
                     (pi, ctx) => pi.Name == "_wordToGuessSe",
                     (pi, ctx) => ctx.ResolveNamed<IGeneratWord>("swedish")
-                )
-                .WithParameter(
-                    (pi, ctx) => pi.ParameterType == typeof(IHangMan),
+                ).WithParameter(
+                    (pi, ctx) => pi.Name == "_hangMan",
                     (pi, ctx) => ctx.Resolve<IHangMan>()
                 ).WithParameter(
-                   (pi, ctx) => pi.ParameterType == typeof(IGameState),
-                   (pi, ctx) => ctx.Resolve<IGameState>()
-               );
+                    (pi, ctx) => pi.Name == "_gameState",
+                    (pi, ctx) => ctx.Resolve<IGameState>()
+                ).WithParameter(
+                    (pi, ctx) => pi.Name == "_wordReveal",
+                    (pi, ctx) => ctx.Resolve<IWordReveal>()
+                );
 
             containerBuilder.RegisterType<Menu>().AsSelf()
                 .WithParameter(
@@ -56,7 +63,7 @@ namespace HangmanGame.AutoFac
                     (pi, ctx) => ctx.ResolveNamed<IGame>("gameSe")
                 )
                 .WithParameter(
-                    (pi, ctx) => pi.ParameterType == typeof(IWelcome),
+                    (pi, ctx) => pi.Name == "welcome",
                     (pi, ctx) => ctx.Resolve<IWelcome>()
                 );
 

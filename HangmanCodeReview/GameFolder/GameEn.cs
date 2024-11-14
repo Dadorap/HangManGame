@@ -1,5 +1,5 @@
 ﻿using HangmanGame.Interface;
-using HangmanGame.WrodGen;
+
 
 namespace HangmanGame.GameFolder
 {
@@ -8,12 +8,13 @@ namespace HangmanGame.GameFolder
         private IGeneratWord _wordToGuessEn;
         private IHangMan _hangMan;
         private IGameState _gameState;
-
-        public GameEn(IGeneratWord _wordToGuessEn, IHangMan _hangMan, IGameState _gameState)
+        private IWordReveal _wordReveal;
+        public GameEn(IGeneratWord _wordToGuessEn, IHangMan _hangMan, IGameState _gameState, IWordReveal _wordReveal)
         {
             this._wordToGuessEn = _wordToGuessEn;
             this._hangMan = _hangMan;
             this._gameState = _gameState;
+            this._wordReveal = _wordReveal;
         }
         public void GameOn()
         {
@@ -24,18 +25,20 @@ namespace HangmanGame.GameFolder
             var hangMan = _hangMan;
 
             char[] guessedWord = new string('_', wordToGuess.Length).ToCharArray();
-            bool state = lives > 0;
+            _wordReveal.RevealTwoRandomLetters(wordToGuess, guessedWord);
 
             List<char> guessedLetters = new List<char>();
+
             Console.WriteLine(wordToGuess);
 
+            bool state = lives > 0;
             while (state)
             {
                 hangMan.DisplayHangman(lives);
 
                 Console.WriteLine("\nThe word: " + new string(guessedWord));
                 Console.WriteLine("Guessed letters: " + string.Join(", ", guessedLetters));
-                Console.Write("Guess a letter: ");
+                Console.Write("Guess a letter(a-z): ");
                 string input = Console.ReadLine().ToLower();
                 if (!string.IsNullOrEmpty(input) && char.TryParse(input[0].ToString(), out char guess) && input.Length == 1 && !char.IsDigit(guess))
                 {

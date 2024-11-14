@@ -11,8 +11,15 @@ namespace HangmanGame.WrodGen
     {
         public string Word()
         {
-            Random random = new Random();
-            string[] words = { "program", "utveckla", "lärande", "teknik", "dator" };
+            Random random = new();
+            string[] words =
+                {
+                "program",
+                "utveckla",
+                "lärande",
+                "teknik",
+                "dator"
+                };
             string wordToGuess = words[random.Next(words.Length)];
 
             return wordToGuess;

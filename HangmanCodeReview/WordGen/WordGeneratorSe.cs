@@ -18,7 +18,8 @@ namespace HangmanGame.WrodGen
                 "utveckla",
                 "lärande",
                 "teknik",
-                "dator"
+                "dator",
+                "öl"
                 };
             string wordToGuess = words[random.Next(words.Length)];
 

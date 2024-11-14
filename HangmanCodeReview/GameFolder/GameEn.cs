@@ -84,7 +84,7 @@ namespace HangmanGame.GameFolder
                 {
                     Console.Clear();
                     Console.BackgroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid input...");
+                    Console.WriteLine("Invalid input try again...");
                     Console.ResetColor();
                 }
             }

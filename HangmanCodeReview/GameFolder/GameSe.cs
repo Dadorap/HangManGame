@@ -83,7 +83,7 @@ namespace HangmanGame.GameFolder
                 {
                     Console.Clear();
                     Console.BackgroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Ogiltig inmatning...");
+                    Console.WriteLine("Ogiltig inmatning försök igen...");
                     Console.ResetColor();
                 }
             }

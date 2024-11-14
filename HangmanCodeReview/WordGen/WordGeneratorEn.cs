@@ -18,7 +18,8 @@ namespace HangmanGame.WrodGen
                 "develop",
                 "learning",
                 "technology",
-                "computer"
+                "computer",
+                "beer"
                 };
             string wordToGuess = words[random.Next(words.Length)];
 

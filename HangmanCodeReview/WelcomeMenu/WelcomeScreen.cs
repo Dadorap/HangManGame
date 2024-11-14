@@ -9,8 +9,20 @@ namespace HangmanGame.Welcome
 
         public void WelcomeDisplay()
         {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            string hangMan = @"
+ _                                             
+| |                                            
+| |__   __ _ _ __   __ _ _ __ ___   __ _ _ __  
+| '_ \ / _` | '_ \ / _` | '_ ` _ \ / _` | '_ \ 
+| | | | (_| | | | | (_| | | | | | | (_| | | | |
+|_| |_|\__,_|_| |_|\__, |_| |_| |_|\__,_|_| |_|
+                    __/ |                      
+                   |___/  
+";
 
-            Console.WriteLine("Welcome to Hangman!");
+            Console.WriteLine(hangMan);
+            Console.ResetColor();
             Console.WriteLine("You have a total of 6 lives. Guess letters to find the correct word.");
             Console.BackgroundColor = ConsoleColor.DarkGreen;
             Console.ForegroundColor = ConsoleColor.Black;

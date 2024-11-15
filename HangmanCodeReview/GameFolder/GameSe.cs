@@ -17,7 +17,6 @@ namespace HangmanGame.GameFolder
         }
         public void GameOn()
         {
-
             Console.Clear();
             int lives = 6;
             var wordToGuess = _wordToGuessSe.Word();
@@ -28,7 +27,7 @@ namespace HangmanGame.GameFolder
 
             List<char> guessedLetters = new List<char>();
 
-            Console.WriteLine(wordToGuess);
+            Console.WriteLine(wordToGuess); // Debugging - du kan ta bort denna rad
 
             bool state = lives > 0;
             while (state)
@@ -37,17 +36,32 @@ namespace HangmanGame.GameFolder
 
                 Console.WriteLine("\nOrdet: " + new string(guessedWord));
                 Console.WriteLine("Gissade bokstäver: " + string.Join(", ", guessedLetters));
+                Console.WriteLine("Tryck på F1 för att gå tillbaka till menyn.");
                 Console.Write("Gissa en bokstav (a-ö): ");
-                string input = Console.ReadLine().ToLower();
-                if (!string.IsNullOrEmpty(input) && char.TryParse(input[0].ToString(), out char guess) && input.Length == 1 && !char.IsDigit(guess))
+
+                // Läs in en tangent
+                ConsoleKeyInfo keyInfo = Console.ReadKey(intercept: true);
+
+                // Kontrollera om F1-tangenten trycktes för att återgå till menyn
+                if (keyInfo.Key == ConsoleKey.F1)
                 {
+                    Console.Clear();
+                    return; // Avsluta metoden och gå tillbaka till menyn
+                }
+
+                char guess = keyInfo.KeyChar; // Hämta tecknet som användaren tryckte på
+
+                // Validera att inmatningen är en enda bokstav
+                if (char.IsLetter(guess))
+                {
+                    guess = char.ToLower(guess); // Säkerställ att det är gemener för jämförelse
 
                     if (guessedLetters.Contains(guess))
                     {
                         Console.Clear();
                         Console.BackgroundColor = ConsoleColor.DarkYellow;
                         Console.ForegroundColor = ConsoleColor.Black;
-                        Console.WriteLine($"Du har redan gissat på den bokstaven. Försök igen. Liv kvar: {lives}");
+                        Console.WriteLine($"Du har redan gissat den bokstaven. Försök igen. Liv kvar: {lives}");
                         Console.ResetColor();
                         continue;
                     }
@@ -77,16 +91,20 @@ namespace HangmanGame.GameFolder
                         Console.WriteLine($"Fel gissat! Du förlorade ett liv. Liv kvar: {lives}");
                         Console.ResetColor();
                     }
+
+                    // Uppdatera spelets status
                     state = lives > 0 && new string(guessedWord) != wordToGuess.ToLower();
                 }
                 else
                 {
                     Console.Clear();
                     Console.BackgroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Ogiltig inmatning försök igen...");
+                    Console.WriteLine("Ogiltig inmatning. Vänligen skriv in en bokstav (a-ö).");
                     Console.ResetColor();
                 }
             }
+
+            // Kontrollera spelets slutstatus
             _gameState.GameStatus(guessedWord, wordToGuess, lives, "swe");
 
         }

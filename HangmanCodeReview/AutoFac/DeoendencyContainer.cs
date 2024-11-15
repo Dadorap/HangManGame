@@ -63,7 +63,7 @@ namespace HangmanGame.AutoFac
                     (pi, ctx) => ctx.ResolveNamed<IGame>("gameSe")
                 )
                 .WithParameter(
-                    (pi, ctx) => pi.Name == "welcome",
+                    (pi, ctx) => pi.Name == "_welcome",
                     (pi, ctx) => ctx.Resolve<IWelcome>()
                 );
 

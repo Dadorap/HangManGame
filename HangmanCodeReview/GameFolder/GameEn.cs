@@ -18,7 +18,6 @@ namespace HangmanGame.GameFolder
         }
         public void GameOn()
         {
-
             Console.Clear();
             int lives = 6;
             var wordToGuess = _wordToGuessEn.Word();
@@ -29,7 +28,7 @@ namespace HangmanGame.GameFolder
 
             List<char> guessedLetters = new List<char>();
 
-            Console.WriteLine(wordToGuess);
+            Console.WriteLine(wordToGuess); // Debugging - you can remove this line
 
             bool state = lives > 0;
             while (state)
@@ -38,10 +37,25 @@ namespace HangmanGame.GameFolder
 
                 Console.WriteLine("\nThe word: " + new string(guessedWord));
                 Console.WriteLine("Guessed letters: " + string.Join(", ", guessedLetters));
-                Console.Write("Guess a letter(a-z): ");
-                string input = Console.ReadLine().ToLower();
-                if (!string.IsNullOrEmpty(input) && char.TryParse(input[0].ToString(), out char guess) && input.Length == 1 && !char.IsDigit(guess))
+                Console.WriteLine("Press F1 to return to the menu.");
+                Console.Write("Guess a letter (a-z): ");
+
+                // Read a single key
+                ConsoleKeyInfo keyInfo = Console.ReadKey(intercept: true);
+
+                // Check for F1 key to return to menu
+                if (keyInfo.Key == ConsoleKey.F1)
                 {
+                    Console.Clear();
+                    return; // Exit the method and go back to the menu
+                }
+
+                char guess = keyInfo.KeyChar; // Get the character the user pressed
+
+                // Validate the input is a single letter
+                if (char.IsLetter(guess))
+                {
+                    guess = char.ToLower(guess); // Ensure it's lowercase for comparison
 
                     if (guessedLetters.Contains(guess))
                     {
@@ -78,19 +92,23 @@ namespace HangmanGame.GameFolder
                         Console.WriteLine($"Wrong guess! You lost a life. Lives remaining: {lives}");
                         Console.ResetColor();
                     }
+
+                    // Update the game state
                     state = lives > 0 && new string(guessedWord) != wordToGuess.ToLower();
                 }
                 else
                 {
                     Console.Clear();
                     Console.BackgroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid input try again...");
+                    Console.WriteLine("Invalid input. Please enter a letter (a-z).");
                     Console.ResetColor();
                 }
             }
-            _gameState.GameStatus(guessedWord, wordToGuess, lives, "eng");
 
+            // Check the final game state
+            _gameState.GameStatus(guessedWord, wordToGuess, lives, "eng");
         }
+
 
 
     }
